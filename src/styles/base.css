@@ -1,0 +1,65 @@
+/*
+ * Base behaviour and the scroll-reveal system.
+ * Kept out of index.css so that file stays exactly as specified.
+ */
+
+html {
+  scroll-behavior: smooth;
+  /* Anchor targets must clear the fixed nav. */
+  scroll-padding-top: 5rem;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+  background: #800000;
+  color: #fff;
+}
+
+:focus-visible {
+  outline: 2px solid #800000;
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* Scroll reveal: hidden until useReveal marks the element as shown. */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(18px);
+  transition:
+    opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+[data-reveal][data-shown] {
+  opacity: 1;
+  transform: none;
+}
+
+/* Stagger siblings inside a list so they cascade rather than pop together. */
+[data-reveal]:nth-of-type(2) {
+  transition-delay: 0.08s;
+}
+[data-reveal]:nth-of-type(3) {
+  transition-delay: 0.16s;
+}
+[data-reveal]:nth-of-type(4) {
+  transition-delay: 0.24s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  [data-reveal] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
