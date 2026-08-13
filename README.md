@@ -1,5 +1,7 @@
 # MB Barbershop — Landing Page
 
+**Live: https://wemerson123.github.io/mb-barbershop-landing/**
+
 Single-page landing site for **MB Barbershop**, 5/149 Caxton St, Paddington, Brisbane.
 React 18 + TypeScript + Vite + Tailwind CSS. Icons from `lucide-react`. No UI or
 animation libraries — every effect is hand-rolled with `requestAnimationFrame`, CSS
@@ -141,6 +143,33 @@ Only one component may own `body { overflow }` at a time. Both `Intro` (scroll l
 during the title card) and `Nav` (mobile sheet) capture the previous value and restore
 it, and neither writes when it isn't active — an earlier version had `Nav` blanking the
 overflow on mount, which silently unlocked the intro.
+
+## Deploying
+
+GitHub Pages, classic build, serving `master:/docs`. No Actions workflow. To ship a
+change:
+
+```bash
+npm run build && git add -A && git commit -m "..." && git push
+```
+
+`vite.config.ts` builds straight into `docs/`, so the built site is committed
+alongside the source — that's deliberate, it's what lets classic Pages serve it
+without a workflow.
+
+Two things that make the subpath work, and will bite if changed carelessly:
+
+- `base: '/mb-barbershop-landing/'`. Vite rewrites the asset URLs it parses, but a
+  bare string like `'/img/hero.webp'` in JSX is invisible to it and would resolve
+  against the domain root. That's what `src/lib/asset.ts` is for — **every**
+  `public/` path goes through `asset()`. If this ever moves to its own domain, set
+  `base: '/'` and `asset()` keeps working unchanged.
+- `public/.nojekyll`, so Pages serves the build verbatim.
+
+`index.html` carries `<meta name="robots" content="noindex, nofollow">`. This
+deployment is a client preview of a real business at a URL they don't own; without it
+the page could be indexed as a duplicate of mbbarbershop.com.au and compete with
+their real site. Remove it only if this becomes the production site.
 
 ## Notes
 
